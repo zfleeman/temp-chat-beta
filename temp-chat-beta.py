@@ -12,9 +12,9 @@ client = discord.Client(intents=intents)
 # config from environment
 token = os.getenv("BOT_TOKEN")
 temp_chat_beta = int(os.getenv("CHANNEL_ID"))
-delay = int(os.getenv("BEFORE_MINUTES", default="60"))
-loop_time = int(os.getenv("LOOP_TIME", default="30"))
-sleep_time = float(os.getenv("SLEEP_TIME", default="0.25"))
+delay = int(os.getenv("BEFORE_MINUTES", "60"))
+loop_time = int(os.getenv("LOOP_TIME", "30"))
+sleep_time = float(os.getenv("SLEEP_TIME", "0.25"))
 
 
 @tasks.loop(seconds=loop_time)
@@ -22,12 +22,12 @@ async def delete_old_messages():
     try:
         channel = client.get_channel(temp_chat_beta)
         before_time = datetime.now() - timedelta(minutes=delay)
-        messages = channel.history(before=before_time)
-
-        if messages:
-            async for message in messages:
+        async for message in channel.history(before=before_time):
+            try:
                 await message.delete()
-            await asyncio.sleep(sleep_time)
+                await asyncio.sleep(sleep_time)
+            except discord.HTTPException as e:
+                print(f"Failed to delete message: {e}")
 
     except Exception as e:
         print(f"An error occurred {e}")
