@@ -24,6 +24,7 @@ temp_chat_beta = int(os.getenv("CHANNEL_ID"))
 delay = int(os.getenv("BEFORE_MINUTES", "60"))
 loop_time = int(os.getenv("LOOP_TIME", "30"))
 sleep_time = float(os.getenv("SLEEP_TIME", "0.25"))
+tz = os.getenv("TZ")
 
 
 @tasks.loop(seconds=loop_time)
@@ -35,7 +36,7 @@ async def delete_old_messages():
             try:
                 await message.delete()
                 logging.info(
-                    f"Deleted message {message.id}, sent at {message.created_at.astimezone(ZoneInfo("America/Denver")).strftime("%H:%M%p")}"
+                    f"Deleted message {message.id}, sent at {message.created_at.astimezone(ZoneInfo(tz)).strftime("%H:%M%p")}"
                 )
                 await asyncio.sleep(sleep_time)
             except Exception as e:
