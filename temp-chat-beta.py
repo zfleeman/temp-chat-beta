@@ -1,9 +1,16 @@
-import discord
 import asyncio
 from datetime import datetime, timedelta
+import logging
 import os
 
+import discord
 from discord.ext import tasks
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -26,22 +33,22 @@ async def delete_old_messages():
             try:
                 await message.delete()
                 await asyncio.sleep(sleep_time)
-            except discord.HTTPException as e:
-                print(f"Failed to delete message: {e}")
+            except Exception as e:
+                logging.warning(f"An error occurred: {e}")
 
     except Exception as e:
-        print(f"An error occurred {e}")
+        logging.warning(f"An error occurred {e}")
 
 
 @delete_old_messages.before_loop
 async def startup():
-    print("Waiting until the client is ready")
+    logging.info("Waiting until the client is ready")
     await client.wait_until_ready()
 
 
 @client.event
 async def on_ready():
-    print(f"Logged in as {client.user}")
+    logging.info(f"Logged in as {client.user}")
     delete_old_messages.start()
 
 
