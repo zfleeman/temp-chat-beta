@@ -2,16 +2,18 @@ import asyncio
 from datetime import datetime, timedelta
 import logging
 import os
+from zoneinfo import ZoneInfo
 
 import discord
 from discord.ext import tasks
 
-
+# configure the logger
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 
+# create our client
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -32,6 +34,9 @@ async def delete_old_messages():
         async for message in channel.history(before=before_time):
             try:
                 await message.delete()
+                logging.info(
+                    f"Deleted message {message.id}, sent at {message.created_at.astimezone(ZoneInfo("America/Denver")).strftime("%H:%M%p")}"
+                )
                 await asyncio.sleep(sleep_time)
             except Exception as e:
                 logging.warning(f"An error occurred: {e}")
