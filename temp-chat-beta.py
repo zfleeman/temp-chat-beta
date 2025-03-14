@@ -24,7 +24,7 @@ channels = os.getenv("CHANNEL_IDS").split(",")
 delay = int(os.getenv("BEFORE_MINUTES", "60"))
 loop_time = int(os.getenv("LOOP_TIME", "30"))
 sleep_time = float(os.getenv("SLEEP_TIME", "1.0"))
-tz = os.getenv("TZ")
+tz = os.getenv("TZ", "America/Denver")
 
 
 @tasks.loop(seconds=loop_time)
