@@ -37,7 +37,7 @@ async def delete_old_messages():
                 try:
                     await message.delete()
                     logging.info(
-                        f"Deleted message {message.id}, sent at {message.created_at.astimezone(ZoneInfo(tz)).strftime("%H:%M%p")}"
+                        f"Deleted message {message.id}, from channel {channel}. Sent at {message.created_at.astimezone(ZoneInfo(tz)).strftime("%H:%M%p")}"
                     )
                     await asyncio.sleep(sleep_time)
                 except Exception as e:
