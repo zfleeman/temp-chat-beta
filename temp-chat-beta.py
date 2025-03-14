@@ -31,7 +31,7 @@ tz = os.getenv("TZ")
 async def delete_old_messages():
     for channel in channels:
         try:
-            channel = client.get_channel(channel)
+            channel = client.get_channel(int(channel))
             before_time = datetime.now() - timedelta(minutes=delay)
             async for message in channel.history(before=before_time):
                 try:
