@@ -4,7 +4,7 @@ WORKDIR /usr/app/
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 ENV BOT_TOKEN=""
-ENV CHANNEL_ID=""
+ENV CHANNEL_IDS=""
 ENV BEFORE_MINUTES=""
 ENV LOOP_TIME=""
 ENV SLEEP_TIME=""
