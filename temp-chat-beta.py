@@ -31,9 +31,9 @@ tz = os.getenv("TZ", "America/Denver")
 async def delete_old_messages():
     for channel in channels:
         try:
-            channel = client.get_channel(int(channel))
+            discord_channel = client.get_channel(int(channel))
             before_time = datetime.now() - timedelta(minutes=delay)
-            async for message in channel.history(before=before_time):
+            async for message in discord_channel.history(before=before_time):
                 try:
                     await message.delete()
                     logging.info(
